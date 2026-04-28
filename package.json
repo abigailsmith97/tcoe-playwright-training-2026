@@ -1,0 +1,13 @@
+{
+  "name": "tcoe-playwright-training-2026",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/abigailsmith97/tcoe-playwright-training-2026.git",
+  "author": "abigailflorence97 <abigail.smith@hmcts.net>",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "@types/node": "^25.6.0"
+  },
+  "scripts": {}
+}

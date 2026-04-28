@@ -1,0 +1,10 @@
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Auth state — generated at runtime by auth.setup.ts, must never be committed
+.auth/
