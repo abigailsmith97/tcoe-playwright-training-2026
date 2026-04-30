@@ -1,8 +1,9 @@
 # TCOE Playwright Training 2026
 
 > A five-module, hands-on Playwright course following HMCTS engineering standards.
-> Each module ships as a **`starter`** branch (problem to solve) and a **`solution`**
-> branch (reference answer) so learners can work independently before comparing.
+> Each module is isolated into a branch pair:
+> **`mX-start`** (problem to solve) and **`mX-end`** (reference solution).
+> This keeps each task focused and avoids overwhelming learners.
 
 ---
 
@@ -11,16 +12,17 @@
 1. [Prerequisites](#prerequisites)
 2. [Repository Structure](#repository-structure)
 3. [Branch Strategy](#branch-strategy)
-4. [Configuration Overview](#configuration-overview)
-5. [Module Guide](#module-guide)
+4. [Learner Workflow (How to Use Branches)](#learner-workflow-how-to-use-branches)
+5. [Configuration Overview](#configuration-overview)
+6. [Module Guide](#module-guide)
    - [Module 1 — Getting Started](#module-1--getting-started)
    - [Module 2 — Locators](#module-2--locators)
    - [Module 3 — Assertions](#module-3--assertions)
    - [Module 4 — Fixtures](#module-4--fixtures)
    - [Module 5 — Page Object Model](#module-5--page-object-model)
-6. [Running Tests](#running-tests)
-7. [Authentication Setup](#authentication-setup)
-8. [Environment Variables](#environment-variables)
+7. [Running Tests](#running-tests)
+8. [Authentication Setup](#authentication-setup)
+9. [Environment Variables](#environment-variables)
 
 ---
 
@@ -89,33 +91,138 @@ tcoe-playwright-training-2026/
 
 ## Branch Strategy
 
-Each module's teaching content is isolated to a dedicated branch pair.
-Learners check out the **starter** branch, complete the tasks, then compare
-with the **solution** branch.
+Each module is delivered as a branch pair and merged into `main` in sequence.
+Learners complete the starter, merge it into `main`, then review the solution
+branch against the updated `main` and merge that too.
 
-| Branch                     | Purpose                                                                          |
-| -------------------------- | -------------------------------------------------------------------------------- |
-| `main`                     | Stable trunk — contains shared config, README, and all completed modules         |
-| `module-1-getting-started` | Placeholder — module 1 needs no starter task                                     |
-| `module-2-locators`        | **Task**: refactor brittle XPath/CSS locators into semantic Playwright locators  |
-| `module-3-assertions`      | **Task**: replace hard `assert` calls with auto-retrying Playwright `expect`     |
-| `module-4-fixtures`        | **Task**: move repeated login from `beforeEach` into a custom Playwright fixture |
-| `module-5-page-objects`    | **Task**: extract inline selectors and actions into Page Object classes          |
+| Branch                | Purpose                                          |
+| --------------------- | ------------------------------------------------ |
+| `main`                | Learner integration branch for completed modules |
+| `m1-start` / `m1-end` | Module 1 starter and solution                    |
+| `m2-start` / `m2-end` | Module 2 starter and solution                    |
+| `m3-start` / `m3-end` | Module 3 starter and solution                    |
+| `m4-start` / `m4-end` | Module 4 starter and solution                    |
+| `m5-start` / `m5-end` | Module 5 starter and solution                    |
 
-### Creating the branches (trainer workflow)
+### Why this structure works for learners
+
+- Every branch is focused on a single module, so learners only see files relevant to that task.
+- Branches are isolated, which avoids cross-module noise and merge conflicts during training.
+- Merging each module into `main` creates a clear, cumulative learning journey.
+
+## Learner Workflow (How to Use Branches)
+
+Use this flow for each module (`X` = 1 to 5):
 
 ```bash
-# Example: create the module-2-locators starter branch
-git checkout -b module-2-locators
-# Remove the solution file so learners only see the starter
-git rm -r tests/module-2-locators/solution
-git commit -m "feat: module-2-locators starter task"
-git push -u origin module-2-locators
+# 1) Get the latest branches
+git fetch --all
 
-# Create the solution branch from main (all files present)
-git checkout main
-git checkout -b module-2-locators-solution
-git push -u origin module-2-locators-solution
+# 2) Start module X from starter
+git switch mX-start
+
+# 3) Install dependencies once (first module only)
+npm install
+npx playwright install --with-deps
+
+# 4) Complete the task and validate
+npx playwright test
+
+# 5) Merge your starter completion into main
+git switch main
+git merge mX-start
+
+# 6) Pull solution branch and align it with latest main
+git switch mX-end
+git merge main
+
+# 7) Compare your answer to the solution
+git diff main...mX-end
+
+# 8) Merge the solution branch into main
+git switch main
+git merge mX-end
+```
+
+Repeat this for `m1`, `m2`, `m3`, `m4`, and `m5` in order.
+
+> If your default branch is named `master` instead of `main`, replace `main` with `master` in the commands above.
+
+Recommended sequence:
+
+1. `m1-start` → merge to `main` → `m1-end` → merge to `main`
+2. `m2-start` → merge to `main` → `m2-end` → merge to `main`
+3. `m3-start` → merge to `main` → `m3-end` → merge to `main`
+4. `m4-start` → merge to `main` → `m4-end` → merge to `main`
+5. `m5-start` → merge to `main` → `m5-end` → merge to `main`
+
+### Quick start (copy/paste by module)
+
+Use one block at a time in your terminal.
+
+```bash
+# Module 1
+git switch m1-start
+npx playwright test
+git switch main
+git merge m1-start
+git switch m1-end
+git merge main
+git diff main...m1-end
+git switch main
+git merge m1-end
+```
+
+```bash
+# Module 2
+git switch m2-start
+npx playwright test
+git switch main
+git merge m2-start
+git switch m2-end
+git merge main
+git diff main...m2-end
+git switch main
+git merge m2-end
+```
+
+```bash
+# Module 3
+git switch m3-start
+npx playwright test
+git switch main
+git merge m3-start
+git switch m3-end
+git merge main
+git diff main...m3-end
+git switch main
+git merge m3-end
+```
+
+```bash
+# Module 4
+git switch m4-start
+npx playwright test
+git switch main
+git merge m4-start
+git switch m4-end
+git merge main
+git diff main...m4-end
+git switch main
+git merge m4-end
+```
+
+```bash
+# Module 5
+git switch m5-start
+npx playwright test
+git switch main
+git merge m5-start
+git switch m5-end
+git merge main
+git diff main...m5-end
+git switch main
+git merge m5-end
 ```
 
 ---
@@ -141,7 +248,7 @@ git push -u origin module-2-locators-solution
 
 ### Module 1 — Getting Started
 
-**Branch:** `module-1-getting-started`  
+**Branches:** `m1-start` → `m1-end`  
 **File:** `tests/module-1-getting-started/starter/getting-started.spec.ts`
 
 **Learning objectives**
@@ -159,7 +266,7 @@ git push -u origin module-2-locators-solution
 
 ### Module 2 — Locators
 
-**Branch:** `module-2-locators`  
+**Branches:** `m2-start` → `m2-end`  
 **File:** `tests/module-2-locators/starter/locators.spec.ts`
 
 **Learning objectives**
@@ -188,7 +295,7 @@ at the top of the starter file.
 
 ### Module 3 — Assertions
 
-**Branch:** `module-3-assertions`  
+**Branches:** `m3-start` → `m3-end`  
 **File:** `tests/module-3-assertions/starter/assertions.spec.ts`
 
 **Learning objectives**
@@ -211,7 +318,7 @@ Replace every Node `assert` call with the equivalent Playwright `expect` asserti
 
 ### Module 4 — Fixtures
 
-**Branch:** `module-4-fixtures`  
+**Branches:** `m4-start` → `m4-end`  
 **File:** `tests/module-4-fixtures/starter/dashboard.spec.ts`
 
 **Learning objectives**
@@ -271,7 +378,7 @@ test("welcome message is visible", async ({ authenticatedPage }) => {
 
 ### Module 5 — Page Object Model
 
-**Branch:** `module-5-page-objects`  
+**Branches:** `m5-start` → `m5-end`  
 **File:** `tests/module-5-page-objects/starter/dashboard.spec.ts`
 
 **Learning objectives**
@@ -296,14 +403,11 @@ test("welcome message is visible", async ({ authenticatedPage }) => {
 ## Running Tests
 
 ```bash
-# Run all tests (all modules, all browsers)
+# Run tests in the current module branch
 npx playwright test
 
-# Run a specific module
-npx playwright test module-2-locators
-
-# Run only the starter tests in a module
-npx playwright test module-2-locators/starter
+# Run tests in headed mode (useful while learning)
+npx playwright test --headed
 
 # Run a single browser
 npx playwright test --project=chromium
